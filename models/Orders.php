@@ -46,4 +46,51 @@ class Orders
 
         return $statement;
     }
+
+    public function create($order_product_id, $product_id, $quantity)
+    {
+        $user_image = "https://res.cloudinary.com/dsykf3mo9/image/upload/v1637466308/ProductImage/User_oudhn7.png";
+
+        $query = 'INSERT INTO ' . $this->table . ' VALUES (DEFAULT, :client_image, :client_name, :employee_ID , :status, DEFAULT, :address ); INSERT INTO ' . $this->op_table . ' VALUES (DEFAULT, :order_product_id, :product_id, :quantity) ';
+
+        $statement = $this->connection->prepare($query);
+
+        //Cleanup data
+        $this->order_id = htmlspecialchars(strip_tags($this->order_id));
+        $this->client_image = htmlspecialchars(strip_tags($this->client_image));
+        $this->client_name = htmlspecialchars(strip_tags($this->client_name));
+        $this->employee_ID = htmlspecialchars(strip_tags($this->employee_ID));
+        $this->status = htmlspecialchars(strip_tags($this->status));
+        $this->finish_date = htmlspecialchars(strip_tags($this->finish_date));
+        $this->address = htmlspecialchars(strip_tags($this->address));
+
+        //binding
+        $statement->bindParam(':client_image', $user_image);
+        $statement->bindParam(':client_name', $this->client_name);
+        $statement->bindParam(':employee_ID', $this->employee_ID);
+        $statement->bindParam(':status', $this->status);
+        $statement->bindParam(':address', $this->address);
+        //binding for orders_products
+        $statement->bindParam(':order_product_id', $order_product_id);
+        $statement->bindParam(':product_id', $product_id);
+        $statement->bindParam(':quantity', $quantity);
+
+        $statement->execute();
+
+        return $statement;
+    }
+
+    public function delete()
+    {
+        $query = 'DELETE FROM  ' . $this->table . ' WHERE order_id = :order_id ';
+
+        $statement = $this->connection->prepare($query);
+
+        //bind ID
+        $statement->bindParam(':order_id', $this->order_id);
+
+        $statement->execute();
+
+        return $statement;
+    }
 }
