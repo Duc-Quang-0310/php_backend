@@ -7,6 +7,15 @@ class Orders
     private $product_table = 'products';
     private $op_table = 'orders_products';
 
+    //table row names
+    private $row_order_id = 'order_id';
+    private $row_client_image = 'client_image';
+    private $row_client_name = 'client_name';
+    private $row_employee_ID = 'employee_ID';
+    private $row_status = 'status';
+    private $row_finish_date = 'finish_date';
+    private $row_address = 'address';
+
     //Orders
     public $order_id;
     public $client_image;
@@ -88,6 +97,37 @@ class Orders
 
         //bind ID
         $statement->bindParam(':order_id', $this->order_id);
+
+        $statement->execute();
+
+        return $statement;
+    }
+
+    public function update($p_id, $qtt)
+    {
+        $query = 'UPDATE ' . $this->table . ' SET ' . $this->row_client_image . ' = :client_image, ' . $this->row_client_name . ' = :client_name, ' . $this->row_employee_ID . ' = :employee_ID, ' . $this->row_status . ' = :status , ' . $this->row_finish_date . ' = DEFAULT, ' . $this->row_address . ' = :address WHERE ' . $this->row_order_id . ' = :order_id ; UPDATE ' . $this->op_table . ' SET product_id = :product_id, quantity = :quantity WHERE orders_product_id = :order_id ';
+
+        $statement = $this->connection->prepare($query);
+
+        //Cleanup data
+        $this->order_id = htmlspecialchars(strip_tags($this->order_id));
+        $this->client_image = htmlspecialchars(strip_tags($this->client_image));
+        $this->client_name = htmlspecialchars(strip_tags($this->client_name));
+        $this->employee_ID = htmlspecialchars(strip_tags($this->employee_ID));
+        $this->status = htmlspecialchars(strip_tags($this->status));
+        $this->finish_date = htmlspecialchars(strip_tags($this->finish_date));
+        $this->address = htmlspecialchars(strip_tags($this->address));
+
+        //binding for orders
+        $statement->bindParam(':order_id', $this->order_id);
+        $statement->bindParam(':client_image', $this->client_image);
+        $statement->bindParam(':client_name', $this->client_name);
+        $statement->bindParam(':employee_ID', $this->employee_ID);
+        $statement->bindParam(':status', $this->status);
+        $statement->bindParam(':address', $this->address);
+        //binding for 
+        $statement->bindParam(':product_id', $p_id);
+        $statement->bindParam(':quantity', $qtt);
 
         $statement->execute();
 
