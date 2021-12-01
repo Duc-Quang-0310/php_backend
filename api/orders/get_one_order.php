@@ -45,7 +45,7 @@ if ($num > 0) {
 
     //Convert to JSON
     echo json_encode(
-        array('success' => true, 'data' => $orders_arr)
+        array('success' => true, 'message' => $orders_arr)
     );
 } else {
     echo json_encode(

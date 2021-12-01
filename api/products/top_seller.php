@@ -4,39 +4,38 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: *");
 
 include_once '../../config/Database.php';
-include_once '../../models/Employee.php';
+include_once '../../models/Products.php';
 
 $database = new Database();
 $db = $database->connect();
 
-$employee = new Employee($db);
+$products = new Products($db);
 
 //employee post query
-$result = $employee->best_seller();
+$result = $products->top_seller();
 
 //Get row count
 $num = $result->rowCount();
 
 if ($num > 0) {
     //Post array
-    $employees_arr = array();
+    $products_arr = array();
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-        $employee_item = array(
-            'employee_id' => $employee_id,
-            'employee_image' => $employee_image,
-            'name' => $name,
-            'email' => $email,
+        $products_item = array(
+            'product_name' => $product_name,
+            'total' => $total,
+            'product_image' => $product_image
         );
 
         //push to "data"
-        array_push($employees_arr, $employee_item);
+        array_push($products_arr, $products_item);
     }
 
     //Convert to JSON
     echo json_encode(
-        array('success' => true, 'message' => $employees_arr)
+        array('success' => true, 'message' => $products_arr)
     );
 } else {
     echo json_encode(

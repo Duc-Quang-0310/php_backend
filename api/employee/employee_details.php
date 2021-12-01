@@ -31,7 +31,7 @@ if ($employee->employee_details()) {
     );
 
     echo json_encode(
-        array('success' => true, 'data' => $employee_arr)
+        array('success' => true, 'message' => $employee_arr)
     );
 } else {
     echo json_encode(

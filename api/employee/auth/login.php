@@ -42,7 +42,7 @@ function returnSuccessMessage($username, $password)
     );
 
     echo json_encode(
-        array('success' => true, 'data' => $data)
+        array('success' => true, 'message' => $data)
     );
 }
 

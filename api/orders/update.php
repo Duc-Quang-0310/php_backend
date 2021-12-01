@@ -26,7 +26,7 @@ $orders->address = $data->address;
 
 if ($orders->update($data->product_id, $data->quantity)) {
     echo json_encode(
-        array('success' => true, 'data' =>  'Update order successfully')
+        array('success' => true, 'message' =>  'Update order successfully')
     );
 } else {
     echo json_encode(
